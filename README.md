@@ -2,14 +2,6 @@
 An app which connect to a WebSocket server. 
 It is based on Reactive Streams,MVVM architecture & Android Architecture components. 
 
-## Features
-* Fetch your shots in a endless recyclerView (paging library)
-* See details of each shots
-* see your account
-* Create a shot and publish it (Image picker and cropping)
-* Edit your published shots
-* Save in drafts your current work
-
 ## Technologies & pattern
 * Kotlin
 * MVVM and Observable/Observer pattern

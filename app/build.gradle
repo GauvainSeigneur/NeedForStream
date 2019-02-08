@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -22,11 +21,75 @@ android {
     }
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    implementation 'com.android.tools.build.jetifier:jetifier-core:1.0.0-beta03'
+    /*
+    *********************************************************************************************
+    * Android X & Android Material
+    *********************************************************************************************/
+    implementation 'com.google.android.material:material:1.1.0-alpha03'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0-alpha02'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
+    implementation 'com.google.android:flexbox:1.1.0'
+    /*
+    *********************************************************************************************
+    * RxJava & RxAndroid
+    *********************************************************************************************/
+    def rxJavaVersion = '2.1.1'
+    def rxAndroidVersion = '2.0.2'
+    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    /*
+    *********************************************************************************************
+    * Android Architecture Components
+    *********************************************************************************************/
+    def archVersion = '2.0.0'
+    // ViewModel and LiveData
+    implementation "androidx.lifecycle:lifecycle-extensions:$archVersion"
+    kapt "androidx.lifecycle:lifecycle-compiler:$archVersion"
+    // optional - ReactiveStreams support for LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$archVersion"
+    // optional - Test helpers for LiveData
+    testImplementation "androidx.arch.core:core-testing:$archVersion"
+    /*
+    *********************************************************************************************
+    * Timber
+    *********************************************************************************************/
+    implementation 'com.jakewharton.timber:timber:4.6.1'
+    /*
+    *********************************************************************************************
+    * Gson - Serialize/deserialize JSON with retrofit
+    *********************************************************************************************/
+    implementation 'com.google.code.gson:gson:2.8.2'
+    /*
+   *********************************************************************************************
+   * Okhttp
+   *********************************************************************************************/
+    def okHttpVersion = '3.10.0'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okHttpVersion"
+    /*
+    *********************************************************************************************
+    * Canary leak
+    *********************************************************************************************/
+    def canaryVersion = '1.6.1'
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$canaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$canaryVersion"
+    // Optional, if you use support library fragments:
+    debugImplementation "com.squareup.leakcanary:leakcanary-support-fragment:$canaryVersion"
+    /*
+    *********************************************************************************************
+    * Tests
+    *********************************************************************************************/
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
