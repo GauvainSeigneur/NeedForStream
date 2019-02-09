@@ -3,7 +3,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.seigneur.gauvain.needforstream.R
 import com.seigneur.gauvain.needforstream.data.model.Car
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,11 +24,20 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         MainViewModel()
     }
 
+    private val appBarOffsetListener by lazy {
+        AppBarLayout.OnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val vTotalScrollRange = appBarLayout.totalScrollRange
+            val vRatio = (vTotalScrollRange.toFloat() + verticalOffset) / vTotalScrollRange
+            mCarImage.alpha =vRatio
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mRvCars.layoutManager = mLayoutManager
         mRvCars.adapter = mCarListAdapter
+        mAppBar.addOnOffsetChangedListener(appBarOffsetListener)
         mMainViewModel.init()
         subscribeToLiveData()
     }

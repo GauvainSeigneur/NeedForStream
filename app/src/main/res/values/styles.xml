@@ -1,11 +1,112 @@
-<resources>
-
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--AppBar and Toolbar style -->
+    <style name="BaseStyle" parent="Theme.MaterialComponents">
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+    </style>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+    <style name="NeedForStreamTheme" parent="BaseStyle">
+        <!-- Colors -->
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <!-- GLOBAL COLORS -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item><!-- in dark theme, it must be lighter -->
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/colorSecondaryVariant</item>
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="android:colorError" tools:targetApi="26">@color/colorError</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorOnSecondary">@color/colorOnSecondary</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorOnError">@color/colorOnError</item>
+	    <item name="android:textColor">@color/colorTextBody</item>
+        <!-- OTHER COlORS -->
+        <item name="android:statusBarColor">@color/colorStatusBar</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:colorEdgeEffect">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/poppins_medium</item>
+        <!-- MATERIAL WIDGET DEFAULT STYLE -->
+        <item name="materialButtonStyle">@style/defaultButtonStyle</item>
+        <item name="floatingActionButtonStyle">@style/defaultFabStyle</item>
+        <item name="materialCardViewStyle">@style/defaultCardViewStyle</item>
+        <!-- transition and overlay-->
+        <item name="android:windowAllowEnterTransitionOverlap">true</item>
+        <item name="android:windowAllowReturnTransitionOverlap">true</item>
+        <item name="android:windowSharedElementsUseOverlay">false</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <!--<item name="chipStyle">@style/ChipStyle</item>-->
     </style>
+
+    <!-- default style for Buttons -->
+    <style name="defaultButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+        <item name="backgroundTint">@color/colorSecondary</item>
+        <item name="android:textColor">@color/colorOnSecondary</item>
+        <item name="iconTint">@color/colorOnSecondary</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+    </style>
+
+    <!-- default style for Buttons -->
+    <style name="defaultFabStyle" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+    </style>
+
+    <style name="defaultCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardBackgroundColor">@color/colorCardBackground</item>
+        <item name="cardCornerRadius">4dp</item>
+	    <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+	    <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+    </style>
+
+    <!--AppBar and Toolbar style -->
+    <style name="NeedForStreamTheme.AppBarOverlay" parent="Base.ThemeOverlay.AppCompat.ActionBar" />
+    <style name="NeedForStreamTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="NeedForStreamTheme.ToolbarTheme" parent="ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+    </style>
+
+    <!--Activity Theming-->
+    <style name="NeedForStreamTheme.MainActivityTheme">
+       <!-- <item name="android:background">@drawable/black_car</item>-->
+    </style>
+
+	<!--Main title for shots and user name -->
+	<style name="TextAppearance.Headline" parent="@android:style/TextAppearance.Material.Headline">
+		<item name="android:fontFamily">@font/poppins_bold</item>
+		<item name="android:textColor">@color/colorHeadline</item>
+	</style>
+
+	<style name="TextAppearance.Subhead" parent="@android:style/TextAppearance.Material.Subhead">
+		<item name="android:fontFamily">@font/poppins_bold</item>
+		<item name="android:textColor">@color/colorSubHead</item>
+	</style>
+
+	<!-- categoryTitle -->
+	<style name="TextAppearance.TitlePrimary" parent="@android:style/TextAppearance.Material.Title">
+		<item name="android:fontFamily">@font/poppins_bold</item>
+		<item name="android:textColor">@color/colorPrimaryTitle</item>
+	</style>
+
+	<style name="TextAppearance.TitleSecondary" parent="@android:style/TextAppearance.Material.Title">
+		<item name="android:textSize">18sp</item>
+		<item name="android:fontFamily">@font/poppins_bold</item>
+		<item name="android:textColor">@color/colorSecondaryTitle</item>
+	</style>
+
+	<style name="TextAppearance.Caption" parent="@android:style/TextAppearance.Material.Caption">
+	</style>
+
+	<style name="TextAppearance.Body" parent="@android:style/TextAppearance.Material.Body1">
+		<item name="android:fontFamily">@font/poppins_medium</item>
+		<item name="android:textColor">@color/colorTextBody</item>>
+	</style>
 
 </resources>
