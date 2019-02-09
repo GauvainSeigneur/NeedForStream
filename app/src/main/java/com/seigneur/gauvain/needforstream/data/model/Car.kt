@@ -1,4 +1,4 @@
-package com.seigneur.gauvain.needforstream
+package com.seigneur.gauvain.needforstream.data.model
 
 import com.google.gson.annotations.SerializedName
 

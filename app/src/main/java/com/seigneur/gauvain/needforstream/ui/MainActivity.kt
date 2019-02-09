@@ -1,8 +1,7 @@
-package com.seigneur.gauvain.needforstream
+package com.seigneur.gauvain.needforstream.ui
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
+import com.seigneur.gauvain.needforstream.R
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.ByteString
