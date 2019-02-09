@@ -6,6 +6,9 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import okio.ByteString
 
+/**
+ * Emit a Flowable each time we received a websocket
+ */
 class RxWebSocketListener(private val emitter: FlowableEmitter<RxWebSocket>) : WebSocketListener() {
 
     override fun onOpen(webSocket: WebSocket?, response: Response?) {
