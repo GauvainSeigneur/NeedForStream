@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Default screen margins, per the Android Design guidelines. -->
+	<dimen name="activity_horizontal_margin">16dp</dimen>
+	<dimen name="activity_vertical_margin">16dp</dimen>
+	<!-- General -->
+	<dimen name="padding_24">24dp</dimen>
+	<dimen name="padding_16">16dp</dimen>
+	<dimen name="padding_12">12dp</dimen>
+	<dimen name="padding_8">8dp</dimen>
+	<dimen name="padding_4">4dp</dimen>
+
+	<!-- item car -->
+	<dimen name="min_card_height">150dp</dimen>
+
+</resources>

@@ -1,21 +1,24 @@
 package com.seigneur.gauvain.needforstream.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.google.gson.Gson
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.seigneur.gauvain.needforstream.R
-import okhttp3.*
-import okhttp3.logging.HttpLoggingInterceptor
-import okio.ByteString
-import org.json.JSONException
-import org.json.JSONObject
-import timber.log.Timber
-import okhttp3.WebSocket
-import okhttp3.OkHttpClient
+import com.seigneur.gauvain.needforstream.data.model.Car
 import kotlinx.android.synthetic.main.activity_main.*
-import okhttp3.WebSocketListener
+import timber.log.Timber
+import java.util.ArrayList
 
+class MainActivity : AppCompatActivity(), CarListCallback {
 
-class MainActivity : AppCompatActivity() {
+    private val mLayoutManager by lazy {
+        LinearLayoutManager(this)
+    }
+    private var carList: MutableList<Car> = ArrayList()
+    private val mCarListAdapter by lazy {
+        CarListAdapter(this, carList, this)
+    }
 
     private val mMainViewModel by lazy {
         MainViewModel()
@@ -24,8 +27,32 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mRvCars.layoutManager = mLayoutManager
+        mRvCars.adapter = mCarListAdapter
         mMainViewModel.init()
+        subscribeToLiveData()
     }
+
+    private fun subscribeToLiveData(){
+        mMainViewModel.mLiveCars.observe(
+            this,
+            Observer {
+                    cars ->
+                showCarList(cars)
+                Timber.d("cars data changed: $cars")
+            }
+        )
+    }
+
+    private fun showCarList(cars: List<Car>?) {
+        mCarListAdapter.clear() //TODO - MANAGE THIS EVENT MORE PROPERLY
+        carList.addAll(cars!!)
+        mCarListAdapter.notifyDataSetChanged()
+    }
+
+   override fun onShotDraftClicked(car: Car?, position: Int) {
+       mMainViewModel.startCar(car)
+   }
 
 
 }

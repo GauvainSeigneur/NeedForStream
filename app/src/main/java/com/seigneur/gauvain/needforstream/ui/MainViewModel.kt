@@ -83,6 +83,12 @@ constructor() : ViewModel() {
     val mLiveCars: LiveData<List<Car>>
         get() = mMutableCars
 
+    fun startCar(car:Car?){
+        Timber.d("clicked : ${car?.Brand}")
+        val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"${car?.Name}\"}}"
+        mWebSocket?.send(selectedCarRequest)
+    }
+
     /*
     *********************************************************************************************
     * PRIVATE METHODS
