@@ -2,6 +2,8 @@
 An app which connect to a WebSocket server. 
 It is based on Reactive Streams,MVVM architecture & Android Architecture components. 
 
+<img src="art/NFS.gif" width="50%"></img>
+
 ## Technologies & pattern
 * Kotlin
 * MVVM and Observable/Observer pattern

@@ -53,6 +53,13 @@ class DetailsFragment: Fragment() {
             }
         )
 
+        mMainViewModel?.mFailureEvent?.observe(
+            this,
+            Observer { t ->
+                Timber.d("error in frag: $t")
+            }
+        )
+
         mMainViewModel?.mLiveCar?.observe(
             this,
             Observer {
