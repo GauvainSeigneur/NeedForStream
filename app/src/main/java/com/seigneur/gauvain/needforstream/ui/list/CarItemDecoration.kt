@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
+//Simple item decoration for each item of the car list
 class CarItemDecoration(private val spaceTopBottom: Int,
                         private val spaceBetween: Int) : RecyclerView.ItemDecoration() {
     override fun getItemOffsets(outRect: Rect, view: View,

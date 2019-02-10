@@ -2,6 +2,9 @@ package com.seigneur.gauvain.needforstream.data.model
 
 import com.google.gson.annotations.SerializedName
 
+/**
+ * Car received by Wbsocket
+ */
 data class Car(
     @SerializedName("Brand")
     var Brand:String,

@@ -4,6 +4,9 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okio.ByteString
 
+/**
+ * Class which include all states of webSocket in order to listen it with RxJava
+ */
 sealed class RxWebSocket(val webSocket: WebSocket?){
     class BinaryMessage(webSocket: WebSocket?, val bytes: ByteString?) : RxWebSocket(webSocket)
     class Opened(webSocket: WebSocket?, val response: Response?) : RxWebSocket(webSocket)

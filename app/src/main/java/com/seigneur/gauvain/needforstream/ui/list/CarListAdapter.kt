@@ -1,20 +1,12 @@
 package com.seigneur.gauvain.needforstream.ui.list
 
-import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.seigneur.gauvain.needforstream.R
 import com.seigneur.gauvain.needforstream.data.model.Car
 
-/**
- * Constructor
- * @param context   - activity
- * @param data      - list of car
- * @param callback  - CarListCallback implementation
- */
-class CarListAdapter(private val context: Context,
-                     private val data: MutableList<Car>,
+class CarListAdapter(private val data: MutableList<Car>,
                      private var mCallback: CarListCallback
 )
     : RecyclerView.Adapter<CarViewHolder>() {

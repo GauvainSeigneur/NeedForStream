@@ -7,7 +7,8 @@ import okhttp3.WebSocketListener
 import okio.ByteString
 
 /**
- * Emit a Flowable each time we received a websocket
+ * RXJava wrapper for WebSocketListener
+ * it emits a RxWebSocket Flowable in accordance to each type of callback
  */
 class RxWebSocketListener(private val emitter: FlowableEmitter<RxWebSocket>) : WebSocketListener() {
 

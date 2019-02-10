@@ -1,5 +1,8 @@
 package com.seigneur.gauvain.needforstream.ui.list
+import android.opengl.Visibility
 import android.os.Bundle
+import android.view.View
+import android.view.ViewStub
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentManager
@@ -16,6 +19,11 @@ import com.seigneur.gauvain.needforstream.ui.details.DetailsFragment
 import com.seigneur.gauvain.needforstream.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.ArrayList
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.seigneur.gauvain.needforstream.utils.Constants.SCRIM_VISIBLE
+import kotlinx.android.synthetic.main.accident_view.*
+import timber.log.Timber
+
 
 class MainActivity : AppCompatActivity(), CarListCallback {
 
@@ -25,7 +33,7 @@ class MainActivity : AppCompatActivity(), CarListCallback {
     private var carList: MutableList<Car> = ArrayList()
 
     private val mCarListAdapter by lazy {
-        CarListAdapter(this, carList, this)
+        CarListAdapter(carList, this)
     }
 
     private val mMainViewModel by lazy {
@@ -44,6 +52,15 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         Gson()
     }
 
+    // init the bottom sheet behavior
+    val mBottomSheetBehavior by lazy {
+        BottomSheetBehavior.from(mBsLayout)
+    }
+
+    /*
+    *********************************************************************************************
+    * LIFECYCLE
+    *********************************************************************************************/
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -56,10 +73,54 @@ class MainActivity : AppCompatActivity(), CarListCallback {
             )
         )
         mAppBar.addOnOffsetChangedListener(appBarOffsetListener)
+        initBottomSheetBehavior()
         mMainViewModel.init()
         subscribeToLiveData()
+
+        mScrim.setOnClickListener {
+            mBottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
+        mRetry.setOnClickListener {
+            Timber.d("mRetry called")
+            mAccidentViewlayout.visibility = View.INVISIBLE
+            mMainViewModel.init()
+        }
+
     }
 
+    /*
+    *********************************************************************************************
+    * LIST CALLBACK
+    *********************************************************************************************/
+    override fun onStartClicked(car: Car?, position: Int) {
+        mMainViewModel.startCar(car)
+    }
+
+    /*
+    *********************************************************************************************
+    * UI METHODS
+    *********************************************************************************************/
+    private fun initBottomSheetBehavior(){
+        mBottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                if (newState== BottomSheetBehavior.STATE_HIDDEN) {
+                    //Stop car when Bottom sheet is hidden
+                    mMainViewModel.stopCar()
+                    //Manage scrim state in accordance
+                    mMainViewModel.setScrimeState(Constants.SCRIM_GONE)
+                }
+            }
+            override fun onSlide( bottomSheet: View, slideOffset: Float) {
+                mScrim.alpha = 1+slideOffset
+                Timber.d("alpha"+slideOffset+1)
+            }
+        })
+    }
+
+    /**
+     * Subscribe to ViewModel LiveData
+     */
     private fun subscribeToLiveData(){
         mMainViewModel.mListLiveMessage.observe(
             this,
@@ -77,6 +138,16 @@ class MainActivity : AppCompatActivity(), CarListCallback {
             }
         )
 
+       mMainViewModel.mLiveState.observe(
+           this,
+           Observer {
+               when (it) {
+                   SCRIM_VISIBLE -> mScrim.visibility = View.VISIBLE
+                   else -> mScrim.visibility = View.GONE
+               }
+           }
+       )
+
         mMainViewModel.mOpenCarDetailView.observe(
             this,
             Observer { openDetails() }
@@ -84,29 +155,22 @@ class MainActivity : AppCompatActivity(), CarListCallback {
     }
 
     private fun showCarList(cars: List<Car>?) {
-        mCarListAdapter.clear() //TODO - MANAGE THIS EVENT MORE PROPERLY
+        mCarListAdapter.clear() //not very clean..
         carList.addAll(cars!!)
         mCarListAdapter.notifyDataSetChanged()
     }
 
     private fun manageError(throwable: Throwable) {
         if (carList.isNullOrEmpty())
-            showSnackbar(throwable)
+            showViewStub(throwable)
         else
             showSnackbar(throwable)
     }
 
     private fun showSnackbar(throwable: Throwable){
         Snackbar.make(mContentMain, throwable.message.toString(), Snackbar.LENGTH_LONG)
-            .setAction("ok", {
-            })
-            .setActionTextColor(ContextCompat.getColor(this, R.color.colorSecondary ))
             .show()
     }
-
-   override fun onStartClicked(car: Car?, position: Int) {
-       mMainViewModel.startCar(car)
-   }
 
     private fun openDetails(){
         //Clear Fragment back stack to avoid lifecycle exception on LiveData Observer
@@ -114,12 +178,14 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         //Recreate Fragment
         val detailFragment=DetailsFragment()
         val transaction = supportFragmentManager.beginTransaction()
-        detailFragment.show(supportFragmentManager, "details")
-       // transaction.replace(R.id.fragLayout, detailFragment)
-        //transaction.addToBackStack(null)
-        //transaction.commit()
+        //detailFragment.show(supportFragmentManager, "details")
+        transaction.replace(R.id.mBsLayout, detailFragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
+        //Set bottom sheet visible
+        mMainViewModel.setScrimeState(Constants.SCRIM_VISIBLE)
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
-
 
     private fun clearBackStack() {
         val manager = supportFragmentManager
@@ -127,6 +193,14 @@ class MainActivity : AppCompatActivity(), CarListCallback {
             val first = manager.getBackStackEntryAt(0)
             manager.popBackStackImmediate(first.id, supportFragmentManager.backStackEntryCount)
         }
+    }
+
+    private fun showViewStub(throwable: Throwable){
+        Timber.d("showViewStub called")
+        mAccidentViewlayout.visibility = View.VISIBLE
+        mIssueText.text = throwable.message
+
+
     }
 
 }

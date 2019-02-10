@@ -36,6 +36,7 @@ constructor() : ViewModel() {
 
     private var mReceivedListValue = MutableLiveData<String>()
     private var mReceivedCarValue = MutableLiveData<String>()
+    private var mScrimState = MutableLiveData<Int>()
     var mFailureEvent=SingleLiveEvent<Throwable>()
 
     var mOpenCarDetailView = SingleLiveEvent<Void>()
@@ -87,11 +88,18 @@ constructor() : ViewModel() {
             Timber.d("already observe Cars Room")
     }
 
+    fun setScrimeState(state:Int) {
+        mScrimState.value = state
+    }
+
     val mListLiveMessage: LiveData<String>
         get() = mReceivedListValue
 
     val mLiveCar: LiveData<String>
         get() = mReceivedCarValue
+
+    val mLiveState: LiveData<Int>
+        get() = mScrimState
 
     fun startCar(car:Car?){
         Timber.d("clicked : ${car?.Brand}")

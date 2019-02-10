@@ -49,15 +49,38 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/mRvCars"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+	<FrameLayout
+			app:layout_behavior="@string/appbar_scrolling_view_behavior"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
 
+		<include layout="@layout/accident_view"/>
+
+		<androidx.recyclerview.widget.RecyclerView
+				android:id="@+id/mRvCars"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+
+	</FrameLayout>
+
+	<View
+			android:id="@+id/mScrim"
+			android:clickable="true"
+			android:focusable="true"
+			android:visibility="gone"
+			android:elevation="@dimen/padding_16"
+			android:alpha="1"
+			android:background="@color/colorScrim"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"/>
 
 	<FrameLayout
-			android:id="@+id/fragLayout"
+			android:id="@+id/mBsLayout"
+			android:orientation="vertical"
+			app:behavior_hideable="true"
+			android:elevation="@dimen/padding_24"
+			android:background="@drawable/bg_bottom_sheet_dialog_fragment"
+			app:layout_behavior="@string/bottom_sheet_behavior"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"/>
 

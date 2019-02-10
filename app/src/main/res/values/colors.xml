@@ -35,4 +35,6 @@
     <color name="colorTextDivider">#331E1E24</color><!-- 43% opacity-->
     <color name="colorPrimaryText">@color/colorHeadline</color>
 
+    <color name="colorScrim">#99323232</color>
+
 </resources>

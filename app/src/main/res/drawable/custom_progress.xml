@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
 	<item android:id="@android:id/background">
 		<shape android:shape="rectangle" >
 			<solid android:color="@color/colorPrimaryVariant" />
@@ -13,10 +12,10 @@
 			<shape>
 				<corners android:radius="@dimen/padding_16"/>
 				<gradient
-						android:startColor="#234"
-						android:centerColor="#234"
+						android:startColor="#2a5e9a"
+						android:centerColor="#dfaa86"
 						android:centerY="0.75"
-						android:endColor="#a24"
+						android:endColor="#feb09e"
 						android:angle="90"
 				/>
 			</shape>
@@ -28,11 +27,11 @@
 			<shape>
 				<corners android:radius="@dimen/padding_16"/>
 				<gradient
-						android:startColor="#144281"
-						android:centerColor="#0b1f3c"
+						android:startColor="#19385C"
+						android:centerColor="#BE6A32"
 						android:centerY="0.75"
-						android:endColor="#06101d"
-						android:angle="270"
+						android:endColor="#FD4116"
+						android:angle="45"
 				/>
 			</shape>
 		</clip>

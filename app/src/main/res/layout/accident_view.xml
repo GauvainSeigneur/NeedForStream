@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+		android:orientation="vertical"
+		android:id="@+id/mAccidentViewlayout"
+		android:visibility="gone"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+	<TextView
+			style="@style/TextAppearance.TitlePrimary"
+			android:padding="@dimen/padding_16"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAlignment="center"
+			android:text="Oops, something went wrong"/>
+
+	<ImageView
+			android:layout_width="match_parent"
+			android:layout_height="90dp"
+			android:src="@drawable/ic_accident"/>
+
+	<TextView
+			android:id="@+id/mIssueText"
+			style="@style/TextAppearance.Body"
+			android:padding="@dimen/padding_16"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAlignment="center"
+			tools:text="Reason"/>
+
+	<Button
+			android:id="@+id/mRetry"
+			android:layout_margin="@dimen/padding_16"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:minHeight="56dp"
+			android:text="Retry"/>
+
+
+</LinearLayout>
