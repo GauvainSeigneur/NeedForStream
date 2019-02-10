@@ -2,14 +2,18 @@ package com.seigneur.gauvain.needforstream.ui.list
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.seigneur.gauvain.needforstream.R
 import com.seigneur.gauvain.needforstream.data.model.Car
 import com.seigneur.gauvain.needforstream.ui.details.DetailsFragment
+import com.seigneur.gauvain.needforstream.utils.Constants
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.ArrayList
 
@@ -36,6 +40,10 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         }
     }
 
+    private val mGson by lazy {
+        Gson()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ViewModelProviders.of(this).get(MainViewModel::class.java)
@@ -51,29 +59,25 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         mAppBar.addOnOffsetChangedListener(appBarOffsetListener)
         mMainViewModel.init()
         subscribeToLiveData()
-        start.setOnClickListener {
-            val transaction = getSupportFragmentManager().beginTransaction()
-            transaction.replace(R.id.fragLayout, DetailsFragment())
-            transaction.addToBackStack(null)
-            transaction.commit()
-
-        }
     }
 
     private fun subscribeToLiveData(){
-        mMainViewModel.mLiveCars.observe(
+        mMainViewModel.mListLiveMessage.observe(
             this,
             Observer {
-                    cars -> showCarList(cars)
+                val type = object : TypeToken<List<Car>>() {}.type
+                val carList = mGson.fromJson<List<Car>>(it, type)
+                showCarList(carList)
             }
         )
 
-       /* mMainViewModel.mFailureEvent.observe(
+
+       mMainViewModel.mFailureEvent.observe(
             this,
             Observer {
                     t ->  manageError(t)
             }
-        )*/
+        )
 
         mMainViewModel.mOpenCarDetailView.observe(
             this,
@@ -109,11 +113,23 @@ class MainActivity : AppCompatActivity(), CarListCallback {
    }
 
     private fun openDetails(){
+        //Clear Fragment back stack to avoid lifecycle exception on LiveData Observer
+        clearBackStack()
+        //Recreate Fragment
+        val detailFragment=DetailsFragment()
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragLayout, DetailsFragment())
+        transaction.replace(R.id.fragLayout, detailFragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
 
+
+    private fun clearBackStack() {
+        val manager = supportFragmentManager
+        if (manager.backStackEntryCount > 0) {
+            val first = manager.getBackStackEntryAt(0)
+            manager.popBackStackImmediate(first.id, supportFragmentManager.backStackEntryCount)
+        }
+    }
 
 }

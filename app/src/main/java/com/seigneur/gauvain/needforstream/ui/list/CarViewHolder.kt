@@ -16,13 +16,29 @@ class CarViewHolder(itemView: View, private var mCallback: CarListCallback) :
         itemView.findViewById<TextView>(R.id.mCarBrand)
     }
 
+    private val mCarName by lazy {
+        itemView.findViewById<TextView>(R.id.mCarName)
+    }
+
+    private val mCarCv by lazy {
+        itemView.findViewById<TextView>(R.id.mCarCV)
+    }
+
+    private val mCarMaxSpeed by lazy {
+        itemView.findViewById<TextView>(R.id.mCarSpeedMax)
+    }
+
     private val mStartCar by lazy {
         itemView.findViewById<Button>(R.id.mStartCar)
     }
 
     fun bindTo(car:Car) {
         mCar=car
-        mCarBrand.text = car.Brand
+        mCarBrand.text =    car.Brand
+        mCarName.text =     car.Name
+        mCarCv.text =     "${car.Cv} Cv"
+        mCarCv.text =     "Max Speed: ${car.SpeedMax} Km/h"
+
         mStartCar.setOnClickListener(this)
     }
 

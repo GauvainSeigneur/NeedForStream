@@ -12,5 +12,5 @@ data class Car(
     @SerializedName("Cv")
     var Cv: Int,
     @SerializedName("CurrentSpeed")
-    var CurrentSpeed: Int)
+    var CurrentSpeed: Float)
 

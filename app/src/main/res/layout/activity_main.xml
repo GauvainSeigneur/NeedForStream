@@ -8,8 +8,6 @@
         android:id="@+id/mContentMain"
         tools:context=".ui.list.MainActivity">
 
-
-
     <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/mAppBar"
             android:layout_width="match_parent"
@@ -61,6 +59,6 @@
 			android:id="@+id/fragLayout"
 			android:layout_width="match_parent"
 			android:background="@color/colorSecondary"
-			android:layout_height="150dp"/>
+			android:layout_height="wrap_content"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

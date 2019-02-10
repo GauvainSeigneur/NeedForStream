@@ -8,6 +8,9 @@ import com.google.gson.reflect.TypeToken
 import com.seigneur.gauvain.needforstream.data.model.Car
 import com.seigneur.gauvain.needforstream.data.rxWebSocket.RxWebSocket
 import com.seigneur.gauvain.needforstream.data.rxWebSocket.RxWebSocketListener
+import com.seigneur.gauvain.needforstream.utils.Constants.LIST_REQUEST
+import com.seigneur.gauvain.needforstream.utils.Constants.NORMAL_CLOSURE_STATUS
+import com.seigneur.gauvain.needforstream.utils.Constants.SPEED_REQUEST
 import com.seigneur.gauvain.needforstream.utils.SingleLiveEvent
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -29,15 +32,14 @@ constructor() : ViewModel() {
 
     private val httpLoggingInterceptor= HttpLoggingInterceptor()
     private var mWebSocket: WebSocket?=null
+
+    private var mReceivedListValue = MutableLiveData<String>()
+    private var mReceivedCarValue = MutableLiveData<String>()
     var mFailureEvent=SingleLiveEvent<Throwable>()
 
     var mOpenCarDetailView = SingleLiveEvent<Void>()
-
     private val mOpenedCar =MutableLiveData<Car>()
-
-    private val mGson by lazy {
-        Gson()
-    }
+    var mCurrentRequest=-1
 
     private val mClient by lazy {
         httpLoggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
@@ -61,7 +63,6 @@ constructor() : ViewModel() {
 
     private var isObservingCarsRoom =false
 
-    private val mMutableCars= MutableLiveData<List<Car>>()
 
     /*
     *********************************************************************************************
@@ -85,8 +86,11 @@ constructor() : ViewModel() {
             Timber.d("already observe Cars Room")
     }
 
-    val mLiveCars: LiveData<List<Car>>
-        get() = mMutableCars
+    val mListLiveMessage: LiveData<String>
+        get() = mReceivedListValue
+
+    val mLiveCar: LiveData<String>
+        get() = mReceivedCarValue
 
     fun startCar(car:Car?){
         Timber.d("clicked : ${car?.Brand}")
@@ -94,6 +98,7 @@ constructor() : ViewModel() {
         mOpenedCar.value =car
         val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"${car?.Name}\"}}"
         mWebSocket?.send(selectedCarRequest)
+        mCurrentRequest= SPEED_REQUEST
     }
 
     val mOpenedLiveCar: LiveData<Car>
@@ -116,19 +121,36 @@ constructor() : ViewModel() {
                         when (it) {
                             is RxWebSocket.Opened -> {
                                 Timber.d("is open: ${it.response}")
-                                //sendCarsRequest(mWebSocket)
-                               //todo.
-                                val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"A8\"}}"
-                                mWebSocket?.send(selectedCarRequest)
+                                sendCarsRequest(mWebSocket)
+                               //mCurrentRequest= SPEED_REQUEST
+                               //val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"A8\"}}"
+                               //mWebSocket?.send(selectedCarRequest)
                             }
                             is RxWebSocket.StringMessage -> {
-                                Timber.d("is received: ${it.text}")
-                                //List
-                               // val turnsType = object : TypeToken<List<Car>>() {}.type
-                               // val carList = mGson.fromJson<List<Car>>(it.text, turnsType)
-                               // mMutableCars.value = carList
-                                //speed of the car
-                                //sendSpeed(car) //todo reactivate when server will be available
+                                when (mCurrentRequest){
+                                    LIST_REQUEST -> {
+                                        Timber.d("is list ${it.text}")
+                                        mReceivedListValue.value = it.text
+                                    }
+                                    SPEED_REQUEST -> {
+                                        Timber.d("is speed ${it.text}")
+                                        mReceivedCarValue.value = it.text
+                                    }
+                                }
+                               /* Timber.d("current request $mCurrentRequest")
+                                when (mCurrentRequest){
+                                    LIST_REQUEST -> {
+                                        val type = object : TypeToken<List<Car>>() {}.type
+                                        val carList = mGson.fromJson<List<Car>>(it.text, type)
+                                        mMutableCars.value = carList
+                                    }
+                                    SPEED_REQUEST -> {
+                                        Timber.d("current car:"+it.text)
+                                        val speedType = object : TypeToken<Car>() {}.type
+                                        val currentCar = mGson.fromJson<Car>(it.text, speedType)
+                                        //Timber.d("current car: $currentCar")
+                                    }
+                                }*/
                             }
                             is RxWebSocket.BinaryMessage -> {
                                 Timber.d("is received: ${it.bytes}")
@@ -161,7 +183,10 @@ constructor() : ViewModel() {
         )
     }
 
+
     private fun sendCarsRequest(webSocket: WebSocket?) {
+        mCurrentRequest= LIST_REQUEST
+
         val jsonObject = JSONObject()
         try {
             jsonObject.put("Type", "infos")
@@ -174,10 +199,5 @@ constructor() : ViewModel() {
 
     private fun sendFailure(throwable: Throwable?) {
         mFailureEvent.value = throwable
-    }
-
-
-    companion object {
-        private val NORMAL_CLOSURE_STATUS = 1000
     }
 }
