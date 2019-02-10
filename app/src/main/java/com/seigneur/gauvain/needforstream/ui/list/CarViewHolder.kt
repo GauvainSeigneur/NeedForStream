@@ -34,10 +34,10 @@ class CarViewHolder(itemView: View, private var mCallback: CarListCallback) :
 
     fun bindTo(car:Car) {
         mCar=car
-        mCarBrand.text =    car.Brand
-        mCarName.text =     car.Name
-        mCarCv.text =     "${car.Cv} Cv"
-        mCarCv.text =     "Max Speed: ${car.SpeedMax} Km/h"
+        mCarBrand.text       =    car.Brand
+        mCarName.text        =     car.Name
+        mCarCv.text          =     "${car.Cv} Cv"
+        mCarMaxSpeed.text    =     "Max Speed: ${car.SpeedMax} Km/h"
 
         mStartCar.setOnClickListener(this)
     }

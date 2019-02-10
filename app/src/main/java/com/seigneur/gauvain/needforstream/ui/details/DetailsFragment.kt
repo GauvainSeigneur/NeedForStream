@@ -1,5 +1,6 @@
 package com.seigneur.gauvain.needforstream.ui.details
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -14,12 +15,13 @@ import com.seigneur.gauvain.needforstream.utils.Constants
 import timber.log.Timber
 import android.provider.Contacts.People
 import com.seigneur.gauvain.needforstream.utils.MathUtils
+import com.seigneur.gauvain.needforstream.utils.RoundedBottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import org.json.JSONObject
 
 
 
-class DetailsFragment: Fragment() {
+class DetailsFragment: RoundedBottomSheetDialogFragment() {
 
     private val mMainViewModel by lazy {
         activity?.let {
@@ -49,11 +51,28 @@ class DetailsFragment: Fragment() {
         subscribeToLiveData()
     }
 
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        stopCar()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        //stopCar()
+    }
+
+    private fun stopCar(){
+        mMainViewModel?.stopCar()
+    }
+
     private fun subscribeToLiveData() {
         mMainViewModel?.mOpenedLiveCar?.observe(
             this,
             Observer { car ->
                 Timber.d("car detail data: ${car.Brand}")
+                mCarBrand.text = car.Brand
+                mCarName.text = car.Name
+                mCarCV.text = "${car.Cv} CV"
             }
         )
 
@@ -71,19 +90,10 @@ class DetailsFragment: Fragment() {
                 val car = mGson.fromJson(it, Car::class.java)
                 val speed = MathUtils.getCurrentSpeedRange(car.CurrentSpeed, car.SpeedMax)
                 Timber.d("current ratio: ${speed} speed ${car.CurrentSpeed}")
+                mCarSpeed.text = car.CurrentSpeed.toString()
                 progress.progress= speed
             }
         )
     }
-
-    /*private fun subscribeToLiveDataT(){
-        mMainViewModel?.mFailureEvent?.observe(
-            activity,
-            Observer {
-                    t ->  Timber.d("error in fragmenr")
-            }
-        )
-
-    }*/
 
 }

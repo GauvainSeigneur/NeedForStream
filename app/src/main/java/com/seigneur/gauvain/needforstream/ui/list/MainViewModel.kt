@@ -11,6 +11,7 @@ import com.seigneur.gauvain.needforstream.data.rxWebSocket.RxWebSocketListener
 import com.seigneur.gauvain.needforstream.utils.Constants.LIST_REQUEST
 import com.seigneur.gauvain.needforstream.utils.Constants.NORMAL_CLOSURE_STATUS
 import com.seigneur.gauvain.needforstream.utils.Constants.SPEED_REQUEST
+import com.seigneur.gauvain.needforstream.utils.Constants.STOP_REQUEST
 import com.seigneur.gauvain.needforstream.utils.SingleLiveEvent
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
@@ -101,6 +102,13 @@ constructor() : ViewModel() {
         mCurrentRequest= SPEED_REQUEST
     }
 
+
+    fun stopCar(){
+        val stopRequest = "{\"Type\": \"stop\", \"UserToken\": 42}"
+        mWebSocket?.send(stopRequest)
+        mCurrentRequest= STOP_REQUEST
+    }
+
     val mOpenedLiveCar: LiveData<Car>
         get() = mOpenedCar
 
@@ -122,9 +130,6 @@ constructor() : ViewModel() {
                             is RxWebSocket.Opened -> {
                                 Timber.d("is open: ${it.response}")
                                 sendCarsRequest(mWebSocket)
-                               //mCurrentRequest= SPEED_REQUEST
-                               //val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"A8\"}}"
-                               //mWebSocket?.send(selectedCarRequest)
                             }
                             is RxWebSocket.StringMessage -> {
                                 when (mCurrentRequest){
@@ -137,20 +142,6 @@ constructor() : ViewModel() {
                                         mReceivedCarValue.value = it.text
                                     }
                                 }
-                               /* Timber.d("current request $mCurrentRequest")
-                                when (mCurrentRequest){
-                                    LIST_REQUEST -> {
-                                        val type = object : TypeToken<List<Car>>() {}.type
-                                        val carList = mGson.fromJson<List<Car>>(it.text, type)
-                                        mMutableCars.value = carList
-                                    }
-                                    SPEED_REQUEST -> {
-                                        Timber.d("current car:"+it.text)
-                                        val speedType = object : TypeToken<Car>() {}.type
-                                        val currentCar = mGson.fromJson<Car>(it.text, speedType)
-                                        //Timber.d("current car: $currentCar")
-                                    }
-                                }*/
                             }
                             is RxWebSocket.BinaryMessage -> {
                                 Timber.d("is received: ${it.bytes}")

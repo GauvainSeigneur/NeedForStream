@@ -18,25 +18,29 @@
 				android:paddingBottom="@dimen/padding_16">
 
 			<TextView
-					android:id="@+id/mCarBrand"
-					style="@style/TextAppearance.Headline"
-					app:layout_constraintTop_toTopOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
+					android:id="@+id/mCarName"
+					style="@style/TextAppearance.Subhead"
 					android:padding="@dimen/padding_16"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					tools:text="Brand"/>
-
-			<TextView
-					android:id="@+id/mCarName"
-					style="@style/TextAppearance.TitlePrimary"
+					tools:text="Name"
 					app:layout_constraintTop_toTopOf="parent"
 					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintBottom_toTopOf="@+id/divider"
+					app:layout_constraintHorizontal_bias="0.5"
+					app:layout_constraintBottom_toTopOf="@+id/divider"/>
+
+			<TextView
+					android:id="@+id/mCarBrand"
+					style="@style/TextAppearance.TitlePrimary"
 					android:padding="@dimen/padding_16"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					tools:text="name"/>
+					tools:text="Brand"
+					android:gravity="start"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintHorizontal_bias="0.5"
+					app:layout_constraintBottom_toTopOf="@+id/mCarSpeedMax"/>
 
 			<View
 					android:id="@+id/divider"
@@ -48,7 +52,7 @@
 
 			<TextView
 					android:id="@+id/mCarSpeedMax"
-					style="@style/TextAppearance.Subhead"
+					style="@style/TextAppearance.Body"
 					app:layout_constraintTop_toBottomOf="@+id/divider"
 					app:layout_constraintStart_toStartOf="parent"
 					android:padding="@dimen/padding_16"
@@ -60,7 +64,7 @@
 
 			<TextView
 					android:id="@+id/mCarCV"
-					style="@style/TextAppearance.Subhead"
+					style="@style/TextAppearance.Body"
 					app:layout_constraintTop_toBottomOf="@+id/divider"
 					app:layout_constraintEnd_toEndOf="parent"
 					android:padding="@dimen/padding_16"

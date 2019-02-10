@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity(), CarListCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ViewModelProviders.of(this).get(MainViewModel::class.java)
         setContentView(R.layout.activity_main)
         mRvCars.layoutManager = mLayoutManager
         mRvCars.adapter = mCarListAdapter
@@ -71,7 +70,6 @@ class MainActivity : AppCompatActivity(), CarListCallback {
             }
         )
 
-
        mMainViewModel.mFailureEvent.observe(
             this,
             Observer {
@@ -81,9 +79,7 @@ class MainActivity : AppCompatActivity(), CarListCallback {
 
         mMainViewModel.mOpenCarDetailView.observe(
             this,
-            Observer {
-                car -> openDetails()
-            }
+            Observer { openDetails() }
         )
     }
 
@@ -118,9 +114,10 @@ class MainActivity : AppCompatActivity(), CarListCallback {
         //Recreate Fragment
         val detailFragment=DetailsFragment()
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragLayout, detailFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+        detailFragment.show(supportFragmentManager, "details")
+       // transaction.replace(R.id.fragLayout, detailFragment)
+        //transaction.addToBackStack(null)
+        //transaction.commit()
     }
 
 
