@@ -1,4 +1,4 @@
-package com.seigneur.gauvain.needforstream.ui
+package com.seigneur.gauvain.needforstream.ui.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,6 +8,7 @@ import com.google.gson.reflect.TypeToken
 import com.seigneur.gauvain.needforstream.data.model.Car
 import com.seigneur.gauvain.needforstream.data.rxWebSocket.RxWebSocket
 import com.seigneur.gauvain.needforstream.data.rxWebSocket.RxWebSocketListener
+import com.seigneur.gauvain.needforstream.utils.SingleLiveEvent
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -27,8 +28,12 @@ constructor() : ViewModel() {
     private val mCompositeDisposable = CompositeDisposable()
 
     private val httpLoggingInterceptor= HttpLoggingInterceptor()
-
     private var mWebSocket: WebSocket?=null
+    var mFailureEvent=SingleLiveEvent<Throwable>()
+
+    var mOpenCarDetailView = SingleLiveEvent<Void>()
+
+    private val mOpenedCar =MutableLiveData<Car>()
 
     private val mGson by lazy {
         Gson()
@@ -51,7 +56,7 @@ constructor() : ViewModel() {
         mClient
             .dispatcher()
             .executorService()
-            .shutdown()
+            //.shutdown()
     }, BackpressureStrategy.BUFFER)
 
     private var isObservingCarsRoom =false
@@ -85,9 +90,14 @@ constructor() : ViewModel() {
 
     fun startCar(car:Car?){
         Timber.d("clicked : ${car?.Brand}")
+        mOpenCarDetailView.call()
+        mOpenedCar.value =car
         val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"${car?.Name}\"}}"
         mWebSocket?.send(selectedCarRequest)
     }
+
+    val mOpenedLiveCar: LiveData<Car>
+        get() = mOpenedCar
 
     /*
     *********************************************************************************************
@@ -106,13 +116,19 @@ constructor() : ViewModel() {
                         when (it) {
                             is RxWebSocket.Opened -> {
                                 Timber.d("is open: ${it.response}")
-                                sendCarsRequest(mWebSocket)
+                                //sendCarsRequest(mWebSocket)
+                               //todo.
+                                val selectedCarRequest = "{\"Type\": \"start\", \"UserToken\": 42, \"Payload\": {\"Name\": \"A8\"}}"
+                                mWebSocket?.send(selectedCarRequest)
                             }
                             is RxWebSocket.StringMessage -> {
                                 Timber.d("is received: ${it.text}")
-                                val turnsType = object : TypeToken<List<Car>>() {}.type
-                                val carList = mGson.fromJson<List<Car>>(it.text, turnsType)
-                                mMutableCars.value = carList
+                                //List
+                               // val turnsType = object : TypeToken<List<Car>>() {}.type
+                               // val carList = mGson.fromJson<List<Car>>(it.text, turnsType)
+                               // mMutableCars.value = carList
+                                //speed of the car
+                                //sendSpeed(car) //todo reactivate when server will be available
                             }
                             is RxWebSocket.BinaryMessage -> {
                                 Timber.d("is received: ${it.bytes}")
@@ -125,7 +141,9 @@ constructor() : ViewModel() {
                                 Timber.d("is Closed: ${it.code} Reason: ${it.reason}")
                             }
                             is RxWebSocket.Failure -> {
-                                Timber.d("is Failed: ${it.t} Response: ${it.response}")
+                                isObservingCarsRoom=false
+                                Timber.d("Failure: ${it.t}")
+                                sendFailure(it.t)
                             }
                             else -> Timber.d("is else: $it")
                         }
@@ -133,6 +151,7 @@ constructor() : ViewModel() {
                     { t ->
                         Timber.d("error on Cars room observer: $t")
                         isObservingCarsRoom=false
+                        sendFailure(t)
                     },
                     {
                         Timber.d("cars room observer complete")
@@ -152,6 +171,11 @@ constructor() : ViewModel() {
             e.printStackTrace()
         }
     }
+
+    private fun sendFailure(throwable: Throwable?) {
+        mFailureEvent.value = throwable
+    }
+
 
     companion object {
         private val NORMAL_CLOSURE_STATUS = 1000

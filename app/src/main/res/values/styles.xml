@@ -45,12 +45,13 @@
 
     <!-- default style for Buttons -->
     <style name="defaultButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="shapeAppearance">?attr/shapeAppearanceMediumComponent</item>
+        <item name="shapeAppearance">?attr/shapeAppearanceLargeComponent</item>
         <item name="backgroundTint">@color/colorSecondary</item>
         <item name="android:textColor">@color/colorOnSecondary</item>
         <item name="iconTint">@color/colorOnSecondary</item>
-        <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/colorSecondary</item>
-        <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/colorSecondary</item>
+	    <item name="cornerRadius">25dp</item>
+        <item name="android:outlineSpotShadowColor" tools:targetApi="28">@color/colorSecondaryVariant</item>
+        <item name="android:outlineAmbientShadowColor" tools:targetApi="28">@color/colorSecondaryVariant</item>
     </style>
 
     <!-- default style for Buttons -->
@@ -75,8 +76,19 @@
 
     <!--Activity Theming-->
     <style name="NeedForStreamTheme.MainActivityTheme">
-       <!-- <item name="android:background">@drawable/black_car</item>-->
     </style>
+
+	<!-- set the rounded drawable as background to your bottom sheet -->
+	<style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+		<item name="android:background">@drawable/bg_bottom_sheet_dialog_fragment</item>
+	</style>
+
+	<style name="BaseBottomSheetDialog" parent="@style/Theme.Design.Light.BottomSheetDialog">
+		<item name="android:windowIsFloating">false</item>
+		<item name="bottomSheetStyle">@style/BottomSheet</item>
+	</style>
+
+	<style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />
 
 	<!--Main title for shots and user name -->
 	<style name="TextAppearance.Headline" parent="@android:style/TextAppearance.Material.Headline">

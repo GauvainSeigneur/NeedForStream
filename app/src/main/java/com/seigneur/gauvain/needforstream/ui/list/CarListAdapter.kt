@@ -1,4 +1,4 @@
-package com.seigneur.gauvain.needforstream.ui
+package com.seigneur.gauvain.needforstream.ui.list
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +15,8 @@ import com.seigneur.gauvain.needforstream.data.model.Car
  */
 class CarListAdapter(private val context: Context,
                      private val data: MutableList<Car>,
-                     private var mCallback: CarListCallback)
+                     private var mCallback: CarListCallback
+)
     : RecyclerView.Adapter<CarViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {

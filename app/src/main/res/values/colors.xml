@@ -2,7 +2,7 @@
 <resources>
     <!--OLD -->
     <color name="colorPrimaryDark">@color/colorPrimaryVariant</color>
-    <color name="colorAccent">#19385C</color>
+    <color name="colorAccent">@color/colorSecondary</color>
     <!-- MATERIAL COLORS -->
     <color name="colorPrimary">#ECE1C7</color>
     <color name="colorPrimaryVariant">#dfcda1</color>
@@ -10,7 +10,8 @@
     <color name="colorPrimaryVariant">#393944</color>-->
     <color name="colorSecondary">#fe7933</color>
     <color name="colorSecondaryVariant">#fe681a</color>
-    <color name="colorCardBackground">#FFFFFF</color>
+    <color name="colorBlue">#19385C</color>
+    <color name="colorCardBackground">#f6f1e4</color>
     <color name="colorBackground">@color/colorPrimary</color>
     <color name="colorSurface">@color/colorPrimaryVariant</color>
     <color name="colorError">#FF6859</color>
@@ -22,6 +23,7 @@
     <!-- Other global colors -->
     <color name="colorPrimaryLight">#f2ebda</color><!-- dark : #4f4f57  light : #FFFFFF -->
     <color name="colorStatusBar">@color/colorPrimary</color>
+
 
     <!-- Text colors --> <!-- dark : #FFFFFF / light  #1E1E24-->
     <color name="colorHeadline">#FF1E1E24</color><!-- 100% opacity-->

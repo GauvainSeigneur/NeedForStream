@@ -1,11 +1,11 @@
-package com.seigneur.gauvain.needforstream.ui
+package com.seigneur.gauvain.needforstream.ui.list
 
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seigneur.gauvain.needforstream.R
 import com.seigneur.gauvain.needforstream.data.model.Car
-import kotlinx.android.synthetic.main.item_car.view.*
 
 class CarViewHolder(itemView: View, private var mCallback: CarListCallback) :
     RecyclerView.ViewHolder(itemView),
@@ -16,14 +16,18 @@ class CarViewHolder(itemView: View, private var mCallback: CarListCallback) :
         itemView.findViewById<TextView>(R.id.mCarBrand)
     }
 
+    private val mStartCar by lazy {
+        itemView.findViewById<Button>(R.id.mStartCar)
+    }
+
     fun bindTo(car:Car) {
         mCar=car
         mCarBrand.text = car.Brand
-        itemView.setOnClickListener(this)
+        mStartCar.setOnClickListener(this)
     }
 
     override fun onClick(v: View?) {
-        mCallback.onShotDraftClicked(mCar, adapterPosition)
+        mCallback.onStartClicked(mCar, adapterPosition)
     }
 
 }
